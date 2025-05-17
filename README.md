@@ -1,2 +1,2 @@
-# Rental-Manager
- A platform to manager rentals
+# rentalmanager
+A vehicle rental manager platform
