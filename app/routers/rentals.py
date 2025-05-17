@@ -33,3 +33,11 @@ def return_vehicle(rental_id: int, db: Session = Depends(get_db)):
     if rental is None:
         raise HTTPException(status_code=404, detail="Rental not found")
     return rental
+
+@router.delete("/{rental_id}", status_code=204)
+def delete_rental(rental_id: int, db: Session = Depends(get_db)):
+    success = crud.delete_rental(db, rental_id)
+    if not success:
+        raise HTTPException(status_code=404, detail="Rental not found")
+    return
+

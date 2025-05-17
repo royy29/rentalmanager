@@ -48,3 +48,9 @@ class Rental(RentalBase):
 
     class Config:
         orm_mode = True
+
+class OnboardUserRental(BaseModel):
+    name: str
+    contact: str
+    vehicle_id: int
+    expected_return: datetime

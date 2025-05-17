@@ -14,7 +14,7 @@ def get_db():
 
 @router.post("/", response_model=schemas.Vehicle)
 def create_vehicle(vehicle: schemas.VehicleCreate, db: Session = Depends(get_db)):
-    return crud.create_vehicle(db, vehicle)
+    return crud.create_veh(db, vehicle)
 
 @router.get("/", response_model=list[schemas.Vehicle])
 def read_vehicles(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
