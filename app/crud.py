@@ -31,7 +31,23 @@ def get_user(db: Session, user_id: int):
     return db.query(models.User).filter(models.User.id == user_id).first()
 
 # Rentals
+# def create_rental(db: Session, rental: schemas.RentalCreate):
+#     db_rental = models.Rental(**rental.dict())
+#     db.query(models.Vehicle).filter(models.Vehicle.id == rental.vehicle_id).update({"is_available": False})
+#     db.add(db_rental)
+#     db.commit()
+#     db.refresh(db_rental)
+#     return db_rental
+
 def create_rental(db: Session, rental: schemas.RentalCreate):
+    # Check if the vehicle is available
+    vehicle = db.query(models.Vehicle).filter(models.Vehicle.id == rental.vehicle_id).first()
+    if not vehicle:
+        raise ValueError(f"Vehicle with ID {rental.vehicle_id} does not exist.")
+    if vehicle.is_available == False:
+        raise ValueError(f"Vehicle with ID {rental.vehicle_id} is not available for rental.")
+
+    # Create the rental
     db_rental = models.Rental(**rental.dict())
     db.query(models.Vehicle).filter(models.Vehicle.id == rental.vehicle_id).update({"is_available": False})
     db.add(db_rental)

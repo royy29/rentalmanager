@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from .. import crud, schemas
 from ..database import SessionLocal
+from app.celery_app.tasks import send_rental_conf_email
 
 router = APIRouter(prefix="/rentals", tags=["rentals"])
 
@@ -14,7 +15,13 @@ def get_db():
 
 @router.post("/", response_model=schemas.Rental)
 def create_rental(rental: schemas.RentalCreate, db: Session = Depends(get_db)):
-    return crud.create_rental(db, rental)
+    try:
+        new_rental = crud.create_rental(db, rental)
+        # Trigger the Celery task to send the confirmation email
+        send_rental_conf_email.delay(new_rental.id)
+        return new_rental
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
 @router.get("/", response_model=list[schemas.Rental])
 def read_rentals(db: Session = Depends(get_db)):

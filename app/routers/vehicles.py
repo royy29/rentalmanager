@@ -28,7 +28,7 @@ def read_vehicle(vehicle_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Vehicle not found")
     return db_vehicle
 
-@router.post("/vehicles/")
+@router.post("/vehicles_bulk/")
 async def upload_vehicle_csv(file: UploadFile = File(...)):
     if not file.filename.endswith(".csv"):
         raise HTTPException(status_code=400, detail="File must be a CSV")

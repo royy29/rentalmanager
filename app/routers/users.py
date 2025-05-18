@@ -1,7 +1,8 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, UploadFile, File
 from sqlalchemy.orm import Session
 from .. import crud, schemas
 from ..database import SessionLocal
+from app.celery_app.tasks import process_bulk_users
 
 router = APIRouter(prefix="/users", tags=["users"])
 
@@ -49,3 +50,15 @@ def onboard_user_and_rent(data: schemas.OnboardUserRental, db: Session = Depends
         "user": new_user,
         "rental": new_rental
     }
+
+@router.post("/users_bulk")
+async def upload_user_csv(file: UploadFile = File(...)):
+    if not file.filename.endswith(".csv"):
+        raise HTTPException(status_code=400, detail="File must be a CSV")
+
+    content = await file.read()
+    content_str = content.decode("utf-8")
+    
+    # Trigger Celery task
+    process_bulk_users.delay(content_str)
+    return {"message": "File received. Processing in background."}
