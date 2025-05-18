@@ -14,26 +14,6 @@ This project provides the following functionalities:
 
 ## Project Structure
 
-Markdown
-
-# Rental Manager API
-
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-
-This is a RESTful API built with FastAPI for managing vehicle rentals. It allows you to manage vehicles, users, and rental records. It also includes a background task for bulk vehicle import using Celery.
-
-## Overview
-
-This project provides the following functionalities:
-
-- **Vehicle Management:** Add, list, retrieve, and bulk import vehicles.
-- **User Management:** Create, list, and retrieve users.
-- **Rental Management:** Create, list, retrieve, mark rentals as returned, and delete rentals.
-- **Combined User Onboarding and Rental:** Create a new user and immediately rent a vehicle to them.
-- **Asynchronous Bulk Import:** Upload a CSV file to add multiple vehicles in the background using Celery.
-
-## Project Structure
-
 Rental Manager/
 ├── README.md
 ├── .gitignore
