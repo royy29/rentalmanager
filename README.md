@@ -167,7 +167,7 @@ This section outlines the pytest-based test scenarios for the Rental Manager API
     - Response status code is `400 Bad Request`.
     - The response includes an error message indicating vehicle unavailability.
 
-### 3. Test Rental Retrieval
+#### 3. Test Rental Retrieval
 
 **Use Case:** Verify retrieval of a rental by its ID.
 
