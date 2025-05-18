@@ -142,7 +142,7 @@ This project offers the following key features:
 
 This section outlines the pytest-based test scenarios for the Rental Manager API.
 
-### 1. Test Rental Creation
+#### 1. Test Rental Creation
 
 **Use Case:** Verify successful rental creation when the vehicle is available.
 
@@ -155,7 +155,7 @@ This section outlines the pytest-based test scenarios for the Rental Manager API
     - The rental is created in the database.
     - The associated vehicle's availability is marked as `unavailable`.
 
-### 2. Test Rental Creation with Unavailable Vehicle
+#### 2. Test Rental Creation with Unavailable Vehicle
 
 **Use Case:** Ensure rental creation fails for unavailable vehicles.
 
@@ -179,7 +179,7 @@ This section outlines the pytest-based test scenarios for the Rental Manager API
     - Response status code is `200 OK`.
     - The response body contains the correct details of the retrieved rental.
 
-### 4. Test Rental Return
+#### 4. Test Rental Return
 
 **Use Case:** Verify marking a rental as returned and updating vehicle availability.
 
@@ -192,7 +192,7 @@ This section outlines the pytest-based test scenarios for the Rental Manager API
     - The `actual_return` field of the rental is updated in the database.
     - The associated vehicle's availability is marked as `available`.
 
-### 5. Test Rental Deletion
+#### 5. Test Rental Deletion
 
 **Use Case:** Verify successful deletion of a rental.
 
