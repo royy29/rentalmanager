@@ -1,17 +1,17 @@
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, File
 from sqlalchemy.orm import Session
 from .. import crud, schemas
-from ..database import SessionLocal
+from app.dependencies import get_db
 from app.celery_app.tasks import process_bulk_users
 
 router = APIRouter(prefix="/users", tags=["users"])
 
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
+# def get_db():
+#     db = SessionLocal()
+#     try:
+#         yield db
+#     finally:
+#         db.close()
 
 @router.post("/", response_model=schemas.User)
 def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):

@@ -1,17 +1,17 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from .. import crud, schemas
-from ..database import SessionLocal
 from app.celery_app.tasks import send_rental_conf_email
+from app.dependencies import get_db
 
 router = APIRouter(prefix="/rentals", tags=["rentals"])
 
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
+# def get_db():
+#     db = SessionLocal()
+#     try:
+#         yield db
+#     finally:
+#         db.close()
 
 @router.post("/", response_model=schemas.Rental)
 def create_rental(rental: schemas.RentalCreate, db: Session = Depends(get_db)):

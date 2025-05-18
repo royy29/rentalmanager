@@ -1,17 +1,17 @@
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, File
 from sqlalchemy.orm import Session
 from .. import crud, schemas, models
-from ..database import SessionLocal
+from app.dependencies import get_db
 from app.celery_app.tasks import process_bulk_vehicles
 
 router = APIRouter(prefix="/vehicles", tags=["vehicles"])
 
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
+# def get_db():
+#     db = SessionLocal()
+#     try:
+#         yield db
+#     finally:
+#         db.close()
 
 @router.post("/", response_model=schemas.Vehicle)
 def create_vehicle(vehicle: schemas.VehicleCreate, db: Session = Depends(get_db)):
