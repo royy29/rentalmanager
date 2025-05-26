@@ -12,31 +12,62 @@ from sqlalchemy.orm import Session
 
 @celery_app.task
 def process_bulk_vehicles(file_data: str):
+    # db = SessionLocal()
+    # reader = csv.DictReader(StringIO(file_data))
+    # for row in reader:
+    #     vehicle = models.Vehicle(
+    #         name=row['name'],
+    #         type=row['type'],
+    #         registration_number=row['registration_number'],
+    #         is_available=row.get('is_available', 'True') == 'True'
+    #     )
+    #     db.add(vehicle)
+    # db.commit()
+    # db.close()
     db = SessionLocal()
-    reader = csv.DictReader(StringIO(file_data))
-    for row in reader:
-        vehicle = models.Vehicle(
-            name=row['name'],
-            type=row['type'],
-            registration_number=row['registration_number'],
-            is_available=row.get('is_available', 'True') == 'True'
-        )
-        db.add(vehicle)
-    db.commit()
-    db.close()
+    try:
+        reader = csv.DictReader(StringIO(file_data))
+        for row in reader:
+            vehicle = models.Vehicle(
+                name=row['name'],
+                type=row['type'],
+                registration_number=row['registration_number'],
+                is_available=row.get('is_available', 'True') == 'True'
+            )
+            db.add(vehicle)
+        db.commit()
+    except Exception as e:
+        logging.error(f"Error processing bulk vehicles: {e}")
+        db.rollback()  
+    finally:
+        db.close() 
 
 @celery_app.task
 def process_bulk_users(file_data: str):
     db = SessionLocal()
-    reader = csv.DictReader(StringIO(file_data))
-    for row in reader:
-        user = models.User(
-            name=row['name'],
-            email=row['email']
-        )
-        db.add(user)
-    db.commit()
-    db.close()
+    # reader = csv.DictReader(StringIO(file_data))
+    # for row in reader:
+    #     user = models.User(
+    #         name=row['name'],
+    #         email=row['email']
+    #     )
+    #     db.add(user)
+    # db.commit()
+    # db.close()
+    try:
+        reader = csv.DictReader(StringIO(file_data))
+        for row in reader:
+            user = models.User(
+                name=row['name'],
+                email=row['email']
+            )
+            db.add(user)
+        db.commit()
+    except Exception as e:
+        logging.error(f"Error processing bulk users: {e}")
+        db.rollback()  
+    finally:
+        db.close()
 
 
 @celery_app.task

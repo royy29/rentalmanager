@@ -29,13 +29,25 @@ def read_vehicle(vehicle_id: int, db: Session = Depends(get_db)):
     return db_vehicle
 
 @router.post("/vehicles_bulk/")
+# async def upload_vehicle_csv(file: UploadFile = File(...)):
+#     if not file.filename.endswith(".csv"):
+#         raise HTTPException(status_code=400, detail="File must be a CSV")
+
+#     content = await file.read()
+#     content_str = content.decode("utf-8")
+    
+#     # Trigger Celery task
+#     process_bulk_vehicles.delay(content_str)
+#     return {"message": "File received. Processing in background."}
+
+#optimized to stream the file line by line to reduce memory usage
 async def upload_vehicle_csv(file: UploadFile = File(...)):
     if not file.filename.endswith(".csv"):
         raise HTTPException(status_code=400, detail="File must be a CSV")
 
-    content = await file.read()
-    content_str = content.decode("utf-8")
-    
-    # Trigger Celery task
-    process_bulk_vehicles.delay(content_str)
+    # Stream the file line by line
+    async for line in file:
+        line_str = line.decode("utf-8")
+        process_bulk_vehicles.delay(line_str)
+
     return {"message": "File received. Processing in background."}

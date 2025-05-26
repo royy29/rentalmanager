@@ -56,9 +56,14 @@ async def upload_user_csv(file: UploadFile = File(...)):
     if not file.filename.endswith(".csv"):
         raise HTTPException(status_code=400, detail="File must be a CSV")
 
-    content = await file.read()
-    content_str = content.decode("utf-8")
+    # content = await file.read()
+    # content_str = content.decode("utf-8")
     
-    # Trigger Celery task
-    process_bulk_users.delay(content_str)
+    # # Trigger Celery task
+    # process_bulk_users.delay(content_str)
+    # return {"message": "File received. Processing in background."}
+    async for line in file:
+        line_str = line.decode("utf-8")
+        process_bulk_users.delay(line_str)
+
     return {"message": "File received. Processing in background."}
